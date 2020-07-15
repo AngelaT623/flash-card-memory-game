@@ -49,7 +49,7 @@ const cardsArray = [
 		img: 'images/traveling.png',
 	},
 ];
-// console.log(cardsArray);
+
 // attach grid container to the board
 const gameBoard = document.querySelector('.grid-container');
 // these need to be set to empty arrays so nothing is hard set to them
@@ -57,16 +57,26 @@ let cardPicked = [];
 let cardPickedImg = [];
 let matchesWon = [];
 let click = 0;
+// add a scoreboard to keep score
+const playerScore = document.querySelector('#score');
 
 
-/********************************
- * Setting up the board and cards
- *******************************/
+
 // make function for the board
 function board() {
+
+/************* 
+* Card sorting 
+**************/
+
+    // set a Math.random function to mix up cards
     cardsArray.sort(function () {
 	return 0.5 - Math.random();
 });
+/********************************
+ * Setting up the board and cards
+ *******************************/
+
 	//maybe for loop? to loop through the cards
 	for (let i = 0; i < cardsArray.length; i++) {
 		let card = document.createElement('img');
@@ -84,6 +94,7 @@ function board() {
 /**********************
  * Checking for matches
  *********************/
+
 //function to check for matches
 function checkForMatches() {
 	let matchCard = document.querySelectorAll('img');
@@ -94,12 +105,12 @@ function checkForMatches() {
 	// if statement
 	if (cardPicked[0] === cardPicked[1]) {
 		// if this is true, then set " "
-		matchCard[card1].setAttribute('src', '');
-		matchCard[card2].setAttribute('src', '');
+        matchCard[card1].setAttribute('src', '');
+        matchCard[card2].setAttribute('src', '');
 		// add alert to tell you when you found a match
 		alert('You found matching cards!');
 		matchesWon.push(cardPicked);
-
+        
 		// else statement
 	} else {
 		// else the cards don't match flip them back over (covid img)
@@ -109,12 +120,18 @@ function checkForMatches() {
 
 	// clear the unmatched cards
 	cardPicked = [];
-	cardPickedImg = [];
+    cardPickedImg = [];
+
+    playerScore.textContent = matchesWon.length
+    if (matchesWon.length === cardsArray.length/2) {
+    playerScore.textContent =  'You won!'
+}
 }
 
 /********************
  * Flipping the cards
  *******************/
+
     // make function to flip cards over
 function flipCard(event) {
 	let cardType = event.target.getAttribute('data-id');
@@ -129,37 +146,17 @@ function flipCard(event) {
 		setTimeout(checkForMatches, 500);
 	}
 }
-// invoke function
-board();
-
-/************* 
-* Card sorting 
-**************/
-// set a Math.random function to mix up cards
-
+    // invoke function
+    board();
 
 /************************
  * restarting a new game
  ************************/
-// add new game button
+
+    // add new game button
 const newGAmeButton = document.querySelector('button');
 newGAmeButton.addEventListener('click', restartGame);
 function restartGame() {
     gameBoard.innerHTML = '';
     board();
 }
-/****************
- * Score Keeping
- ***************/
-
-
-// add a scoreboard to keep score
-// const scoreBoard = document.querySelector('#score');
-// console.log(scoreBoard);
-
-// let score = 0;
-// function handleMatchCount() {
-// 	score++;
-
-// 	scoreBoard.innerText = score;
-// }
