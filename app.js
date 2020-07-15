@@ -57,17 +57,16 @@ let cardPicked = [];
 let cardPickedImg = [];
 let matchesWon = [];
 let click = 0;
-// add a scoreboard to keep score
-const scoreBoard = document.querySelector('#score');
-let score = 0;
-function handleCardCount() {
-	score += 1;
-	// console.log(scoreBoard);
-	scoreBoard.innerText = score;
-}
 
+
+/********************************
+ * Setting up the board and cards
+ *******************************/
 // make function for the board
 function board() {
+    cardsArray.sort(function () {
+	return 0.5 - Math.random();
+});
 	//maybe for loop? to loop through the cards
 	for (let i = 0; i < cardsArray.length; i++) {
 		let card = document.createElement('img');
@@ -77,23 +76,26 @@ function board() {
 		// add event listener to listen for click to flip the card over
 		card.addEventListener('click', flipCard);
 		// need to append cards to the game
-		gameBoard.appendChild(card);
+        gameBoard.appendChild(card);
+        
 	}
 }
 
+/**********************
+ * Checking for matches
+ *********************/
 //function to check for matches
 function checkForMatches() {
 	let matchCard = document.querySelectorAll('img');
-	// first value in my array
+	// first and second value in my array
 	const card1 = cardPickedImg[0];
-	// second value in my array
-    const card2 = cardPickedImg[1];
-    console.log(card1, card2)
+	const card2 = cardPickedImg[1];
+	// console.log(card1, card2)
 	// if statement
 	if (cardPicked[0] === cardPicked[1]) {
-		// if this is true, then set a white card to represent "empty space"
-		matchCard[card1].setAttribute('src', 'images/white_space.png');
-		matchCard[card2].setAttribute('src', 'images/white_space.png');
+		// if this is true, then set " "
+		matchCard[card1].setAttribute('src', '');
+		matchCard[card2].setAttribute('src', '');
 		// add alert to tell you when you found a match
 		alert('You found matching cards!');
 		matchesWon.push(cardPicked);
@@ -103,12 +105,6 @@ function checkForMatches() {
 		// else the cards don't match flip them back over (covid img)
 		matchCard[card1].setAttribute('src', 'images/covid.png');
 		matchCard[card2].setAttribute('src', 'images/covid.png');
-		// add alert to tell you if the cards don't match
-
-		// saw something about setTimeout... look into this for the cards flipping back over?
-		setTimeout(function () {
-			alert('Not a match, try again');
-		}, 1000);
 	}
 
 	// clear the unmatched cards
@@ -116,31 +112,54 @@ function checkForMatches() {
 	cardPickedImg = [];
 }
 
-// make function to flip cards over
+/********************
+ * Flipping the cards
+ *******************/
+    // make function to flip cards over
 function flipCard(event) {
 	let cardType = event.target.getAttribute('data-id');
 	// push cards after being flipped
 	cardPicked.push(cardsArray[cardType].name);
 	cardPickedImg.push(cardType);
-    event.target.setAttribute('src', cardsArray[cardType].img);
-    console.log(event.target);
-    console.log(cardPickedImg)
-    click++;
+	event.target.setAttribute('src', cardsArray[cardType].img);
+	// console.log(event.target);
+	// console.log(cardPickedImg)
+	click++;
 	if (click > 0 && click % 2 === 0) {
 		setTimeout(checkForMatches, 500);
 	}
 }
 // invoke function
 board();
-// checkForMatches();
-// flipCard();
 
+/************* 
+* Card sorting 
+**************/
 // set a Math.random function to mix up cards
-cardsArray.sort(function () {
-	return 0.5 - Math.random();
-});
 
+
+/************************
+ * restarting a new game
+ ************************/
 // add new game button
-// function startNewGAme('.new-game') {
-// // let
+const newGAmeButton = document.querySelector('button');
+newGAmeButton.addEventListener('click', restartGame);
+function restartGame() {
+    gameBoard.innerHTML = '';
+    board();
+}
+/****************
+ * Score Keeping
+ ***************/
+
+
+// add a scoreboard to keep score
+// const scoreBoard = document.querySelector('#score');
+// console.log(scoreBoard);
+
+// let score = 0;
+// function handleMatchCount() {
+// 	score++;
+
+// 	scoreBoard.innerText = score;
 // }
