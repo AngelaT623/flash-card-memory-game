@@ -69,7 +69,7 @@ function board() {
 * Card sorting 
 **************/
 
-    // set a Math.random function to mix up cards
+// set a Math.random function to mix up cards
     cardsArray.sort(function () {
 	return 0.5 - Math.random();
 });
